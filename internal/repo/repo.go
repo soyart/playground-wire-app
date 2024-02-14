@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"errors"
+
 	"example.com/playground-wire-app/internal/dbconn"
 	"example.com/playground-wire-app/internal/logger"
 )
@@ -20,9 +22,10 @@ func ProvideRepo(
 ) (
 	*RepoBasic,
 	func(),
+	error,
 ) {
 	if conn == nil {
-		return nil, nil
+		return nil, nil, errors.New("nil conn")
 	}
 
 	repo := RepoBasic{
@@ -30,7 +33,7 @@ func ProvideRepo(
 		logger: logger,
 	}
 
-	return &repo, func() { repo.Close() }
+	return &repo, func() { repo.Close() }, nil
 }
 
 func (r *RepoBasic) Close() error {

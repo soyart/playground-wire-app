@@ -8,7 +8,7 @@ import (
 	"example.com/playground-wire-app/internal/app"
 )
 
-func initApp(env string) (*app.App, func()) {
+func initApp(env string) (*app.App, func(), error) {
 	switch env {
 	case "DEBUG", "debug":
 		return di.InitializeAppDebug()
@@ -19,9 +19,14 @@ func initApp(env string) (*app.App, func()) {
 
 func main() {
 	envENV, _ := os.LookupEnv("ENV")
-	app, cleanup := initApp(envENV)
 
-	err := app.Start()
+	app, cleanup, err := initApp(envENV)
+	if err != nil {
+		cleanup()
+		log.Fatalf("failed to init app: %v", err)
+	}
+
+	err = app.Start()
 	if err != nil {
 		cleanup()
 		log.Fatalf("app got error: %v", err)

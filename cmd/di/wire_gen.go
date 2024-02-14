@@ -17,12 +17,15 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeApp() (*app.App, func()) {
+func InitializeApp() (*app.App, func(), error) {
 	config := _wireConfigValue
 	connBasic := dbconn.ProvideDbConn(config)
 	string2 := config.AppName
 	loggerBasic := logger.ProvideLoggerBasic(string2)
-	repoBasic, cleanup := repo.ProvideRepo(connBasic, loggerBasic)
+	repoBasic, cleanup, err := repo.ProvideRepo(connBasic, loggerBasic)
+	if err != nil {
+		return nil, nil, err
+	}
 	appApp := &app.App{
 		Configuration: config,
 		Repository:    repoBasic,
@@ -30,7 +33,7 @@ func InitializeApp() (*app.App, func()) {
 	}
 	return appApp, func() {
 		cleanup()
-	}
+	}, nil
 }
 
 var (
@@ -40,12 +43,15 @@ var (
 	}
 )
 
-func InitializeAppDebug() (*app.App, func()) {
+func InitializeAppDebug() (*app.App, func(), error) {
 	configConfig := config.ProvideDefaultConfig()
 	connBasic := dbconn.ProvideDbConn(configConfig)
 	string2 := _wireStringValue
 	loggerCount := logger.ProvideLoggerCount(string2)
-	repoBasic, cleanup := repo.ProvideRepo(connBasic, loggerCount)
+	repoBasic, cleanup, err := repo.ProvideRepo(connBasic, loggerCount)
+	if err != nil {
+		return nil, nil, err
+	}
 	appApp := &app.App{
 		Configuration: configConfig,
 		Repository:    repoBasic,
@@ -53,7 +59,7 @@ func InitializeAppDebug() (*app.App, func()) {
 	}
 	return appApp, func() {
 		cleanup()
-	}
+	}, nil
 }
 
 var (

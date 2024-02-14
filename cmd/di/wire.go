@@ -31,7 +31,7 @@ var PersistenceSet = wire.NewSet(
 	repo.ProvideRepo, // returns *RepoBasic, which implements Repo
 )
 
-func InitializeApp() (*app.App, func()) {
+func InitializeApp() (*app.App, func(), error) {
 	wire.Build(
 		// config.Config will be provided by this wire.Value
 		wire.Value(
@@ -57,10 +57,10 @@ func InitializeApp() (*app.App, func()) {
 		wire.Struct(new(app.App), "Configuration", "Repository", "Logger"),
 	)
 
-	return nil, nil
+	return nil, nil, nil
 }
 
-func InitializeAppDebug() (*app.App, func()) {
+func InitializeAppDebug() (*app.App, func(), error) {
 	wire.Build(
 		wire.Value("debug"), // strings will be provided with value "debug"
 		wire.Bind(new(logger.Logger), new(*logger.LoggerCount)),
@@ -70,5 +70,5 @@ func InitializeAppDebug() (*app.App, func()) {
 		wire.Struct(new(app.App), "Configuration", "Repository", "Logger"),
 	)
 
-	return nil, nil
+	return nil, nil, nil
 }
