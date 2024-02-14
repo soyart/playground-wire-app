@@ -6,15 +6,20 @@ import (
 	"example.com/playground-wire-app/internal/config"
 )
 
-type Conn struct {
+type Conn interface {
+	Ping() error
+	Close() error
+}
+
+type ConnBasic struct {
 	conf config.Config
 }
 
 func ProvideDbConn(conf config.Config) Conn {
-	return Conn{conf: conf}
+	return &ConnBasic{conf: conf}
 }
 
-func (c *Conn) Ping() error {
+func (c *ConnBasic) Ping() error {
 	if c.conf.SomeInt%2 == 0 {
 		return fmt.Errorf("SomeInt is not even: %d", c.conf.SomeInt)
 	}
@@ -22,6 +27,6 @@ func (c *Conn) Ping() error {
 	return nil
 }
 
-func (c *Conn) Close() error {
+func (c *ConnBasic) Close() error {
 	return nil
 }
