@@ -28,7 +28,10 @@ func InitializeApp() app.App {
 	wire.Build(
 		config.ProvideConfig,
 		PersistenceSet,
-		app.ProvideApp,
+
+		// Inject fields "Configuration" and "Repository"
+		// with some provider values within this injector
+		wire.Struct(new(app.App), "Configuration", "Repository"),
 	)
 
 	return app.App{}

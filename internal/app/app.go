@@ -8,15 +8,8 @@ import (
 )
 
 type App struct {
-	conf config.Config
-	repo repo.Repo
-}
-
-func ProvideApp(conf config.Config, repo repo.Repo) App {
-	return App{
-		conf: conf,
-		repo: repo,
-	}
+	Configuration config.Config
+	Repository    repo.Repo
 }
 
 func (a *App) Start() error {

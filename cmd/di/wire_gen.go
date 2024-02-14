@@ -20,7 +20,10 @@ func InitializeApp() app.App {
 	configConfig := config.ProvideConfig()
 	connBasic := dbconn.ProvideDbConn(configConfig)
 	repoRepo := repo.ProvideRepo(connBasic)
-	appApp := app.ProvideApp(configConfig, repoRepo)
+	appApp := app.App{
+		Configuration: configConfig,
+		Repository:    repoRepo,
+	}
 	return appApp
 }
 
