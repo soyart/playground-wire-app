@@ -10,6 +10,7 @@ import (
 	"example.com/playground-wire-app/internal/app"
 	"example.com/playground-wire-app/internal/config"
 	"example.com/playground-wire-app/internal/dbconn"
+	"example.com/playground-wire-app/internal/logger"
 	"example.com/playground-wire-app/internal/repo"
 	"github.com/google/wire"
 )
@@ -18,13 +19,14 @@ import (
 
 func InitializeApp() (*app.App, func()) {
 	config := _wireConfigValue
-	string2 := config.AppName
 	connBasic := dbconn.ProvideDbConn(config)
-	repoRepo, cleanup := repo.ProvideRepo(connBasic)
+	repoBasic, cleanup := repo.ProvideRepo(connBasic)
+	string2 := config.AppName
+	loggerBasic := logger.ProvideLogger(string2)
 	appApp := &app.App{
-		Name:          string2,
 		Configuration: config,
-		Repository:    repoRepo,
+		Repository:    repoBasic,
+		Logger:        loggerBasic,
 	}
 	return appApp, func() {
 		cleanup()
@@ -40,4 +42,4 @@ var (
 
 // wire.go:
 
-var PersistenceSet = wire.NewSet(dbconn.ProvideDbConn, wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), repo.ProvideRepo)
+var PersistenceSet = wire.NewSet(wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), dbconn.ProvideDbConn, wire.Bind(new(repo.Repo), new(*repo.RepoBasic)), repo.ProvideRepo)
