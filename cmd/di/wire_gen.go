@@ -11,6 +11,7 @@ import (
 	"example.com/playground-wire-app/internal/config"
 	"example.com/playground-wire-app/internal/dbconn"
 	"example.com/playground-wire-app/internal/repo"
+	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
@@ -22,3 +23,7 @@ func InitializeApp() app.App {
 	appApp := app.ProvideApp(configConfig, repoRepo)
 	return appApp
 }
+
+// wire.go:
+
+var PersistenceSet = wire.NewSet(dbconn.ProvideDbConn, repo.ProvideRepo)

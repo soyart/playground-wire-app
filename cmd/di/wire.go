@@ -12,11 +12,15 @@ import (
 	"example.com/playground-wire-app/internal/repo"
 )
 
+var PersistenceSet = wire.NewSet(
+	dbconn.ProvideDbConn,
+	repo.ProvideRepo,
+)
+
 func InitializeApp() app.App {
 	wire.Build(
 		config.ProvideConfig,
-		dbconn.ProvideDbConn,
-		repo.ProvideRepo,
+		PersistenceSet,
 		app.ProvideApp,
 	)
 
