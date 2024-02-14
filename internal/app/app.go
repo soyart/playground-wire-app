@@ -25,5 +25,5 @@ func (a *App) Start() error {
 	time.Sleep(time.Second * time.Duration(a.Configuration.RunDuration))
 	a.Logger.Log("app.App", "app_shutdown")
 
-	return nil
+	return a.Repository.Close()
 }

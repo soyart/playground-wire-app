@@ -20,9 +20,9 @@ import (
 func InitializeApp() (*app.App, func()) {
 	config := _wireConfigValue
 	connBasic := dbconn.ProvideDbConn(config)
-	repoBasic, cleanup := repo.ProvideRepo(connBasic)
 	string2 := config.AppName
-	loggerBasic := logger.ProvideLogger(string2)
+	loggerBasic := logger.ProvideLoggerBasic(string2)
+	repoBasic, cleanup := repo.ProvideRepo(connBasic, loggerBasic)
 	appApp := &app.App{
 		Configuration: config,
 		Repository:    repoBasic,
@@ -40,6 +40,30 @@ var (
 	}
 )
 
+func InitializeAppDebug() (*app.App, func()) {
+	configConfig := config.ProvideDefaultConfig()
+	connBasic := dbconn.ProvideDbConn(configConfig)
+	string2 := _wireStringValue
+	loggerCount := logger.ProvideLoggerCount(string2)
+	repoBasic, cleanup := repo.ProvideRepo(connBasic, loggerCount)
+	appApp := &app.App{
+		Configuration: configConfig,
+		Repository:    repoBasic,
+		Logger:        loggerCount,
+	}
+	return appApp, func() {
+		cleanup()
+	}
+}
+
+var (
+	_wireStringValue = "debug"
+)
+
 // wire.go:
 
+// PersistentSet is not buildable on its own, because ProvideRepo requires Logger,
+// but none of the providers in this set provides Logger.
+//
+// To use it, you must build it along with other providers that provide Logger.
 var PersistenceSet = wire.NewSet(wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), dbconn.ProvideDbConn, wire.Bind(new(repo.Repo), new(*repo.RepoBasic)), repo.ProvideRepo)

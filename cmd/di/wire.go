@@ -13,6 +13,10 @@ import (
 	"example.com/playground-wire-app/internal/repo"
 )
 
+// PersistentSet is not buildable on its own, because ProvideRepo requires Logger,
+// but none of the providers in this set provides Logger.
+//
+// To use it, you must build it along with other providers that provide Logger.
 var PersistenceSet = wire.NewSet(
 	// Since Go best practice is to return concrete types, we'll need
 	// to bind the interface to the type that implements it.
@@ -46,10 +50,23 @@ func InitializeApp() (*app.App, func()) {
 		// ProvideLogger provide Logger,
 		// with appName injected from config.Config.AppName
 		wire.Bind(new(logger.Logger), new(*logger.LoggerBasic)),
-		logger.ProvideLogger,
+		logger.ProvideLoggerBasic,
 
 		// Inject fields "Name", "Configuration" and "Repository"
 		// with some provider values within this injector
+		wire.Struct(new(app.App), "Configuration", "Repository", "Logger"),
+	)
+
+	return nil, nil
+}
+
+func InitializeAppDebug() (*app.App, func()) {
+	wire.Build(
+		wire.Value("debug"), // strings will be provided with value "debug"
+		wire.Bind(new(logger.Logger), new(*logger.LoggerCount)),
+		config.ProvideDefaultConfig,
+		PersistenceSet,
+		logger.ProvideLoggerCount,
 		wire.Struct(new(app.App), "Configuration", "Repository", "Logger"),
 	)
 
