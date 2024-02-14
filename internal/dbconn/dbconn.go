@@ -1,7 +1,8 @@
 package dbconn
 
 import (
-	"fmt"
+	"errors"
+	"time"
 
 	"example.com/playground-wire-app/internal/config"
 )
@@ -20,8 +21,8 @@ func ProvideDbConn(conf config.Config) *ConnBasic {
 }
 
 func (c *ConnBasic) Ping() error {
-	if c.conf.RunDuration%2 == 0 {
-		return fmt.Errorf("SomeInt is not even: %d", c.conf.RunDuration)
+	if time.Now().Unix()%2 == 0 {
+		return errors.New("failed to ping db")
 	}
 
 	return nil

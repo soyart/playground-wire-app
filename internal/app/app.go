@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"example.com/playground-wire-app/internal/config"
@@ -15,15 +16,23 @@ type App struct {
 	Logger        logger.Logger
 }
 
-func (a *App) Start() error {
+func (a *App) Run() error {
 	switch {
 	case a.Logger == nil, a.Repository == nil:
 		return errors.New("app has no name")
 	}
 
-	a.Logger.Log("app.App", "app_start")
+	defer a.Logger.Log("app.App.Run", "app_shutdown")
+
+	a.Logger.Log("app.App.Run", "app_start")
+	data, err := a.Repository.Read()
+	if err != nil {
+		return err
+	}
+
+	a.Logger.Log("app.App.Run", fmt.Sprintf("got some data: %v", data))
+
 	time.Sleep(time.Second * time.Duration(a.Configuration.RunDuration))
-	a.Logger.Log("app.App", "app_shutdown")
 
 	return a.Repository.Close()
 }

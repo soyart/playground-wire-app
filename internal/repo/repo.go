@@ -9,6 +9,7 @@ import (
 
 type Repo interface {
 	Close() error
+	Read() ([]byte, error)
 }
 
 type RepoBasic struct {
@@ -36,7 +37,19 @@ func ProvideRepo(
 	return &repo, func() { repo.Close() }, nil
 }
 
+func (r *RepoBasic) Read() ([]byte, error) {
+	r.logger.Log("repo.RepoBasic.Read", "reading from conn")
+
+	err := r.conn.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte("Some data"), nil
+}
+
 func (r *RepoBasic) Close() error {
-	r.logger.Log("repo.RepoBasic", "closing repo")
+	r.logger.Log("repo.RepoBasic.Close", "closing repo")
+
 	return r.conn.Close()
 }
