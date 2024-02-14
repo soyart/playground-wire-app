@@ -16,11 +16,11 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeApp() app.App {
+func InitializeApp() *app.App {
 	configConfig := config.ProvideConfig()
 	connBasic := dbconn.ProvideDbConn(configConfig)
 	repoRepo := repo.ProvideRepo(connBasic)
-	appApp := app.App{
+	appApp := &app.App{
 		Configuration: configConfig,
 		Repository:    repoRepo,
 	}
