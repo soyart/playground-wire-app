@@ -18,12 +18,12 @@ import (
 
 func InitializeApp() app.App {
 	configConfig := config.ProvideConfig()
-	conn := dbconn.ProvideDbConn(configConfig)
-	repoRepo := repo.ProvideRepo(conn)
+	connBasic := dbconn.ProvideDbConn(configConfig)
+	repoRepo := repo.ProvideRepo(connBasic)
 	appApp := app.ProvideApp(configConfig, repoRepo)
 	return appApp
 }
 
 // wire.go:
 
-var PersistenceSet = wire.NewSet(dbconn.ProvideDbConn, repo.ProvideRepo)
+var PersistenceSet = wire.NewSet(dbconn.ProvideDbConn, wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), repo.ProvideRepo)

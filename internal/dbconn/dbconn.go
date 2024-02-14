@@ -15,7 +15,7 @@ type ConnBasic struct {
 	conf config.Config
 }
 
-func ProvideDbConn(conf config.Config) Conn {
+func ProvideDbConn(conf config.Config) *ConnBasic {
 	return &ConnBasic{conf: conf}
 }
 

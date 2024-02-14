@@ -13,7 +13,14 @@ import (
 )
 
 var PersistenceSet = wire.NewSet(
-	dbconn.ProvideDbConn,
+	dbconn.ProvideDbConn, // returns *ConnBasic, which implements Conn
+	// Since Go best practice is to return concrete types, we'll need
+	// to bind the interface to the type that implements it.
+	//
+	// The first argument to wire.Bind is a pointer to a value of the desired interface type
+	// and the second argument is a pointer to a value of the type that implements the interface.
+	wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)),
+
 	repo.ProvideRepo,
 )
 
