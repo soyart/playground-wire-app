@@ -1,6 +1,11 @@
+//go:build wireinject
+// +build wireinject
+
 package di
 
 import (
+	"github.com/google/wire"
+
 	"example.com/playground-wire-app/internal/app"
 	"example.com/playground-wire-app/internal/config"
 	"example.com/playground-wire-app/internal/dbconn"
@@ -8,10 +13,12 @@ import (
 )
 
 func InitializeApp() app.App {
-	conf := config.ProvideConfig()
-	conn := dbconn.ProvideDbConn(conf)
-	repo := repo.ProvideRepo(conn)
-	app := app.ProvideApp(conf, repo)
+	wire.Build(
+		config.ProvideConfig,
+		dbconn.ProvideDbConn,
+		repo.ProvideRepo,
+		app.ProvideApp,
+	)
 
-	return app
+	return app.App{}
 }
