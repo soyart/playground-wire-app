@@ -5,9 +5,9 @@ type Config struct {
 	RunDuration int64
 }
 
-func ProvideDefaultConfig() Config {
+func ProvideDefaultConfig(appName string) Config {
 	return Config{
-		AppName:     "dev",
+		AppName:     appName,
 		RunDuration: 0,
 	}
 }

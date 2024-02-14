@@ -44,9 +44,9 @@ var (
 )
 
 func InitializeAppDebug() (*app.App, func(), error) {
-	configConfig := config.ProvideDefaultConfig()
-	connBasic := dbconn.ProvideDbConn(configConfig)
 	string2 := _wireStringValue
+	configConfig := config.ProvideDefaultConfig(string2)
+	connBasic := dbconn.ProvideDbConn(configConfig)
 	loggerCount := logger.ProvideLoggerCount(string2)
 	repoBasic, cleanup, err := repo.ProvideRepo(connBasic, loggerCount)
 	if err != nil {

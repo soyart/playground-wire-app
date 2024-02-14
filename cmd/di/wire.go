@@ -36,7 +36,7 @@ func InitializeApp() (*app.App, func(), error) {
 		// config.Config will be provided by this wire.Value
 		wire.Value(
 			config.Config{
-				AppName:     "production",
+				AppName:     "prod",
 				RunDuration: 2,
 			},
 		),
@@ -64,10 +64,10 @@ func InitializeAppDebug() (*app.App, func(), error) {
 	wire.Build(
 		wire.Value("debug"), // strings will be provided with value "debug"
 		wire.Bind(new(logger.Logger), new(*logger.LoggerCount)),
-		config.ProvideDefaultConfig,
-		PersistenceSet,
-		logger.ProvideLoggerCount,
 		wire.Struct(new(app.App), "Configuration", "Repository", "Logger"),
+		PersistenceSet,
+		config.ProvideDefaultConfig,
+		logger.ProvideLoggerCount,
 	)
 
 	return nil, nil, nil
