@@ -24,7 +24,7 @@ var PersistenceSet = wire.NewSet(
 	repo.ProvideRepo,
 )
 
-func InitializeApp() *app.App {
+func InitializeApp() (*app.App, func()) {
 	wire.Build(
 		// config.Config will be provided by this wire.Value
 		wire.Value(
@@ -45,5 +45,5 @@ func InitializeApp() *app.App {
 		wire.Struct(new(app.App), "Name", "Configuration", "Repository"),
 	)
 
-	return &app.App{}
+	return nil, nil
 }

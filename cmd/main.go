@@ -7,10 +7,11 @@ import (
 )
 
 func main() {
-	app := di.InitializeApp()
+	app, cleanup := di.InitializeApp()
 
 	err := app.Start()
 	if err != nil {
+		cleanup()
 		log.Fatalf("app got error: %v", err)
 	}
 }

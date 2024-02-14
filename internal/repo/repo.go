@@ -6,8 +6,9 @@ type Repo struct {
 	conn dbconn.Conn
 }
 
-func ProvideRepo(conn dbconn.Conn) Repo {
-	return Repo{conn: conn}
+func ProvideRepo(conn dbconn.Conn) (Repo, func()) {
+	repo := Repo{conn: conn}
+	return repo, func() { repo.Close() }
 }
 
 func (r *Repo) Close() error {
