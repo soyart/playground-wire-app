@@ -3,17 +3,11 @@ package main
 import (
 	"log"
 
-	"example.com/playground-wire-app/internal/app"
-	"example.com/playground-wire-app/internal/config"
-	"example.com/playground-wire-app/internal/dbconn"
-	"example.com/playground-wire-app/internal/repo"
+	"example.com/playground-wire-app/cmd/di"
 )
 
 func main() {
-	conf := config.ProvideConfig()
-	conn := dbconn.ProvideDbConn(conf)
-	repo := repo.ProvideRepo(conn)
-	app := app.ProvideApp(conf, repo)
+	app := di.InitializeApp()
 
 	err := app.Start()
 	if err != nil {
