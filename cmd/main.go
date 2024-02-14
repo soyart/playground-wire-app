@@ -11,6 +11,6 @@ func main() {
 
 	err := app.Start()
 	if err != nil {
-		log.Fatal("app got error", err)
+		log.Fatalf("app got error: %v", err)
 	}
 }

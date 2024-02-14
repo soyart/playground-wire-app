@@ -17,15 +17,24 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() *app.App {
-	configConfig := config.ProvideConfig()
-	connBasic := dbconn.ProvideDbConn(configConfig)
+	config := _wireConfigValue
+	string2 := config.AppName
+	connBasic := dbconn.ProvideDbConn(config)
 	repoRepo := repo.ProvideRepo(connBasic)
 	appApp := &app.App{
-		Configuration: configConfig,
+		Name:          string2,
+		Configuration: config,
 		Repository:    repoRepo,
 	}
 	return appApp
 }
+
+var (
+	_wireConfigValue = config.Config{
+		AppName:     "production",
+		RunDuration: 2,
+	}
+)
 
 // wire.go:
 

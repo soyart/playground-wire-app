@@ -20,8 +20,8 @@ func ProvideDbConn(conf config.Config) *ConnBasic {
 }
 
 func (c *ConnBasic) Ping() error {
-	if c.conf.SomeInt%2 == 0 {
-		return fmt.Errorf("SomeInt is not even: %d", c.conf.SomeInt)
+	if c.conf.RunDuration%2 == 0 {
+		return fmt.Errorf("SomeInt is not even: %d", c.conf.RunDuration)
 	}
 
 	return nil

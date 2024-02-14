@@ -26,12 +26,23 @@ var PersistenceSet = wire.NewSet(
 
 func InitializeApp() *app.App {
 	wire.Build(
-		config.ProvideConfig,
+		// config.Config will be provided by this wire.Value
+		wire.Value(
+			config.Config{
+				AppName:     "production",
+				RunDuration: 2,
+			},
+		),
+
 		PersistenceSet,
 
-		// Inject fields "Configuration" and "Repository"
+		// config.Config.AppName will be the value for "string" provider,
+		// which is used in app.App.Name
+		wire.FieldsOf(new(config.Config), "AppName"),
+
+		// Inject fields "Name", "Configuration" and "Repository"
 		// with some provider values within this injector
-		wire.Struct(new(app.App), "Configuration", "Repository"),
+		wire.Struct(new(app.App), "Name", "Configuration", "Repository"),
 	)
 
 	return &app.App{}
