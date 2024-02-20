@@ -13,7 +13,7 @@ import (
 )
 
 func TestApp(t *testing.T) {
-	t.Run("app name should get null key error", func(t *testing.T) {
+	t.Run("app name should get result", func(t *testing.T) {
 		appName := "appName"
 		expectedData := fmt.Sprintf("Some data for key %s", appName)
 
