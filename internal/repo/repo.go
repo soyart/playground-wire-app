@@ -2,14 +2,18 @@ package repo
 
 import (
 	"errors"
+	"fmt"
 
 	"example.com/playground-wire-app/internal/dbconn"
 	"example.com/playground-wire-app/internal/logger"
 )
 
+const errNullKey = "null key"
+
+//go:generate mockgen -source=./repo.go -destination=./mock_repo/mock_repo.go -package=mock_repo
 type Repo interface {
 	Close() error
-	Read() ([]byte, error)
+	Read(key string) ([]byte, error)
 }
 
 type RepoBasic struct {
@@ -37,15 +41,21 @@ func ProvideRepo(
 	return &repo, func() { repo.Close() }, nil
 }
 
-func (r *RepoBasic) Read() ([]byte, error) {
+func (r *RepoBasic) Read(key string) ([]byte, error) {
 	r.logger.Log("repo.RepoBasic.Read", "reading from conn")
+
+	if key == "" {
+		return nil, errors.New(errNullKey)
+	}
 
 	err := r.conn.Ping()
 	if err != nil {
 		return nil, err
 	}
 
-	return []byte("Some data"), nil
+	data := fmt.Sprintf("Some data for key %s", key)
+
+	return []byte(data), nil
 }
 
 func (r *RepoBasic) Close() error {
