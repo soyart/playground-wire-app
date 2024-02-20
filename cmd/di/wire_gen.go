@@ -38,7 +38,7 @@ func InitializeApp() (*app.App, func(), error) {
 
 var (
 	_wireConfigValue = config.Config{
-		AppName:     "production",
+		AppName:     "prod",
 		RunDuration: 2,
 	}
 )
