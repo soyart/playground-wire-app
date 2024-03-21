@@ -9,6 +9,7 @@ import (
 	"example.com/playground-wire-app/internal/app"
 	"example.com/playground-wire-app/internal/config"
 	"example.com/playground-wire-app/internal/dbconn"
+	"example.com/playground-wire-app/internal/domain"
 	"example.com/playground-wire-app/internal/logger"
 	"example.com/playground-wire-app/internal/repo"
 )
@@ -27,7 +28,7 @@ var PersistenceSet = wire.NewSet(
 	wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)),
 	dbconn.ProvideDbConn, // returns *ConnBasic, which implements Conn
 
-	wire.Bind(new(repo.Repo), new(*repo.RepoBasic)),
+	wire.Bind(new(domain.Repo), new(*repo.RepoBasic)),
 	repo.ProvideRepo, // returns *RepoBasic, which implements Repo
 )
 

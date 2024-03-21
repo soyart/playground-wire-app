@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"example.com/playground-wire-app/internal/config"
+	"example.com/playground-wire-app/internal/domain/mock_repo"
 	"example.com/playground-wire-app/internal/logger"
-	"example.com/playground-wire-app/internal/repo/mock_repo"
 )
 
 func TestApp(t *testing.T) {

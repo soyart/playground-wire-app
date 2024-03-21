@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"example.com/playground-wire-app/internal/config"
+	"example.com/playground-wire-app/internal/domain"
 	"example.com/playground-wire-app/internal/logger"
-	"example.com/playground-wire-app/internal/repo"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 
 type App struct {
 	Configuration config.Config
-	Repository    repo.Repo
+	Repository    domain.Repo
 	Logger        logger.Logger
 }
 

@@ -10,6 +10,7 @@ import (
 	"example.com/playground-wire-app/internal/app"
 	"example.com/playground-wire-app/internal/config"
 	"example.com/playground-wire-app/internal/dbconn"
+	"example.com/playground-wire-app/internal/domain"
 	"example.com/playground-wire-app/internal/logger"
 	"example.com/playground-wire-app/internal/repo"
 	"github.com/google/wire"
@@ -72,4 +73,4 @@ var (
 // but none of the providers in this set provides Logger.
 //
 // To use it, you must build it along with other providers that provide Logger.
-var PersistenceSet = wire.NewSet(wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), dbconn.ProvideDbConn, wire.Bind(new(repo.Repo), new(*repo.RepoBasic)), repo.ProvideRepo)
+var PersistenceSet = wire.NewSet(wire.Bind(new(dbconn.Conn), new(*dbconn.ConnBasic)), dbconn.ProvideDbConn, wire.Bind(new(domain.Repo), new(*repo.RepoBasic)), repo.ProvideRepo)
